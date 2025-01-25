@@ -1,0 +1,28 @@
+# Create a directory of your choice (e.g. ./immich-app) to hold the docker-compose.yml and .env files.
+# Move to the directory you created
+
+    mkdir /immich-app
+    cd /immich-app
+
+# Download docker-compose.yml and example.env by running the following commands:
+
+# Get docker-compose.yml file
+
+    wget -O docker-compose.yml https://github.com/immich-app/immich/releases/latest/download/docker-compose.yml
+
+# Get .env file
+
+    wget -O .env https://github.com/immich-app/immich/releases/latest/download/example.env
+
+# Edit .env file
+
+    Change "UPLOAD_LOCATION" to the specified path of your choosing. In my case I set it to /mnt/hdd1/Immich/
+
+    Change "DB_PASSWORD" if you would like.
+
+    Set timezone by uncommenting TZ= line
+
+docker compose up -d
+
+
+https://immich.app/docs/install/docker-compose

@@ -1,0 +1,60 @@
+# How to make a Raid array (Not so detailed because original copy was accidentally deleted)
+
+# Double check all steps before executing to ensure proper configuration
+
+# In this example I am making /dev/sda1/ and /dev/sda2 into a Raid 1 configuration name "md0"
+
+    "sudo apt install mdadm"
+
+# Partition Disks
+
+    "lsblk"
+    "sudo /sbin/fdisk /dev/sdb"
+    "sudo /sbin/fdisk /dev/sdc"
+
+        # In fdisk enter these commands
+
+        "d" - deletes old partition
+        "n" - make new partition
+            Partition number - default
+            First sector - default
+            Last sector - round off the last few numbers so they are even with each other - eg. (The Default is 23437768703 and it becomes 23437760000)
+        "t" - creates partition type
+            "fd" - Linux filesystem
+        "w"
+
+    "lsblk"
+
+# You should see /dev/sdb1 and /dev/sdc1 created.
+
+# Creating a Raid 1 array named md0 with /dev/sdb1 and /dev/sdc1
+
+    "sudo /sbin/mdadm --create --verbose /dev/md0 --level=1 --raid-devices=2 /dev/sdb1 /dev/sdc1"
+
+# View progress of resync
+
+    "cat /proc/mdstat"
+    "ls /dev | grep md"
+    "lsblk"
+
+        # You can reboot and write to Raid array before process finishes
+
+# Edit mdadm.conf so raid array persists after reboot
+
+    "sudo su"
+    "sudo mdadm --detail --scan > /etc/mdadm/mdadm.conf"
+
+# Make filesystem
+
+    "sudo mkfs.ext4 /dev/md0"
+
+# Mount filesystem and change ownership
+
+    "mkdir /mnt/Raid_1"
+    "sudo chown ashep:ashep Raid_1/"
+    "sudo nano /etc/fstab"
+
+        # copy this into fstab -
+            "UUID="f5f8f38e-584c-4fdb-92f6-db41edaf2731"     /mnt/Raid_1 ext4 defaults 0 0
+
+https://www.youtube.com/watch?v=CJ0ed38N8-s&t=209s

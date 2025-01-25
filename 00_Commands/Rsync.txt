@@ -1,0 +1,9 @@
+sudo rsync -avxHAWXS --numeric-ids --info=progress2 /mnt/hdd1 /mnt/Raid_1/
+
+-a  : all files, with permissions, etc..
+-v  : verbose, mention files
+-x  : stay on one file system
+-H  : preserve hard links (not included with -a)
+-A  : preserve ACLs/permissions (not included with -a)
+-X  : preserve extended attributes (not included with -a)
+

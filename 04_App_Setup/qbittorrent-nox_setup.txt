@@ -1,0 +1,68 @@
+# Downloading and installing qbittorrent-nox
+
+    "sudo add-apt-repository ppa:qbittorrent-team/qbittorrent-stable"
+
+        # I did not need to do this but am adding just in case.
+
+    "sudo apt install qbittorrent-nox"
+
+# Change port number the web UI displays on
+
+    "sudo qbittorrent-nox --webui-port=8765"
+
+        # No output text means something likely went wrong
+        # This also starts the service and you will need to change to run as background service later.
+
+
+
+# Creating background process to start on boot
+
+    "sudo qbittorrent-nox --webui-port=8765 -d"
+        # -d will make program run in background
+
+# Make qbittorrent-nox group
+
+    sudo adduser --system --group qbittorrent-nox
+
+# Add user to group
+
+    sudo adduser your-username qbittorrent-nox
+
+# Make systemd process by creating a file with nano and adding the text outlined below.
+# Make sure to change port to one you would like to use.
+
+    sudo nano /etc/systemd/system/qbittorrent-nox.service
+
+[Unit]
+Description=qBittorrent Command Line Client
+After=network.target
+
+[Service]
+#Do not change to "simple"
+Type=forking
+User=qbittorrent-nox
+Group=qbittorrent-nox
+UMask=007
+ExecStart=/usr/bin/qbittorrent-nox -d --webui-port=8765
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
+
+# Bug found where port does not change. Edited with --webui-port=8888 and port remains 8888 even after creating .service file. Advise to select port first with "sudo qbittorrent-nox --webui-port=8765" before creating background service.
+
+    "sudo systemctl start qbittorrent-nox@ashep"
+            #where @ashep is username
+
+    "sudo systemctl daemon-reload"
+
+# Allow to start on boot automatically
+
+    "sudo systemctl enable qbittorrent-nox"
+    "sudo systemctl enable qbittorrent-nox@ashep" (might be needed if top one does not work)
+
+# Default Credentials:
+    user: admin
+    pass: adminadmin
+
+https://www.linuxbabe.com/ubuntu/install-qbittorrent-ubuntu-18-04-desktop-server

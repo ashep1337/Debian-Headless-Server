@@ -1,0 +1,58 @@
+# Make sure to not add a desktop environment to Debian for headless install
+
+Install sudo && add to sudoers
+
+    - "su"
+    - "apt install sudo"
+    - "sudo usermod -aG sudo [username]"
+
+# Formatting and Mounting additional hard drive
+
+Open fdisk to create new partition.
+
+    - "sudo  [fdisk or] /sbin/fdisk /dev/sda"
+
+        # Inside of fdisk promt window type the following commands
+
+            "-n" to create new partition table
+                -- inside of this window you will be prompted to make the size of the drive. leave default if using entire drive.
+
+            "-w" to write a table to disk and exit
+                -- confirm with "y" and exit.
+
+# Making Filesystem -
+
+    - "sudo mkfs.ext4 /dev/sda[X]"
+        # Make sure "x" equals your partition number eg. (/dev/sda1)
+        # This creates an ext4 filesystem that is compatible with Linux.
+
+# Mounting Hard Drive on Boot -
+
+    Make sure the hard drive is detected with-
+
+        - "lsblk"
+
+    Make the directory where you want to mount the hard drive -
+
+        - "sudo mkdir /mnt/path_to_hdd"
+
+    Mount hard drive (in this case /dev/sda[X]) to directory -
+
+        - "sudo mount /dev/sda[X] /mnt/path_to_hdd"
+
+# Editing /etc/fstab to automatically mount hard drive on boot
+
+    Get UUID with:
+
+        - "sudo blkid"
+
+    Edit fstab directory with -
+
+        - "sudo nano /etc/fstab"
+
+    Add the following line to the bottom of your fstab directory -
+
+        - "UUID="d08f0efc-1e17-4db8-9df0-1e3e6f99e543"     /mnt/path_to_hdd"
+
+            # Make sure to replace the UUID with the one provided by the blkid command.
+            # Make sure /mnt/path_to_hdd is your correct mounting path for the hard drive.

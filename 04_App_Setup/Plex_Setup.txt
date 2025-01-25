@@ -1,0 +1,33 @@
+# Download Plexmediaserver with wget:
+
+        - "wget https://downloads.plex.tv/plex-media-server-new/1.32.5.7349-8f4248874/debian/plexmediaserver_1.32.5.7349-8f4248874_amd64.deb"
+
+    Go into directory where .deb file is located and install with:
+
+        - "sudo dpkg -i plexmediaserver_1.41.3.9314-a0bfb8370_amd64.deb"
+            # Make sure plex*.deb file is correct (do not copy/paste)
+
+    Access web portal through another computer on port 32400
+
+        Website should be http://[ipaddress:32400/web]
+            "http://192.168.1.36:32400/web"
+
+    Optionally you can forward the port 32400 from your router and be able to access your Plex from anywhere.
+
+        In Unifi go to Security > Port Forwarding
+
+            Create a rule:
+
+                From: Any
+                Port: 32400
+                Forward IP: 192.168.1.36 [Plex IP address]
+                Forward Port: 32400
+                Protocol: Both
+
+    Then click your icon in the top right of Plex and click Account Settings
+
+    On the left column under Settings > Remote Access you may have to manually select the "retry button"
+
+    If there is a green check mark you are good to go!
+
+

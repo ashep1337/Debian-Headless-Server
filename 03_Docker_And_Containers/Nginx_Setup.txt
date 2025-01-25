@@ -1,0 +1,96 @@
+# Create a directory to store files. I do everything in ~/Docker/Nginxproxymanager
+
+    Create a docker-compose.yml file:
+
+        version: '3.8'
+        services:
+        app:
+            image: 'jc21/nginx-proxy-manager:latest'
+            restart: unless-stopped
+            ports:
+            # These ports are in format <host-port>:<container-port>
+            - '80:80' # Public HTTP Port
+            - '443:443' # Public HTTPS Port
+            - '81:81' # Admin Web Port
+            # Add any other Stream port you want to expose
+            # - '21:21' # FTP
+
+            # Uncomment the next line if you uncomment anything in the section
+            # environment:
+            # Uncomment this if you want to change the location of
+            # the SQLite DB file within the container
+            # DB_SQLITE_FILE: "/data/database.sqlite"
+
+            # Uncomment this if IPv6 is not enabled on your host
+            # DISABLE_IPV6: 'true'
+
+            volumes:
+            - ./data:/data
+            - ./letsencrypt:/etc/letsencrypt
+
+
+    Then:
+        "docker compose up -d"
+
+
+    Default Credentials:
+
+        Email:    admin@example.com
+        Password: changeme
+
+# Set up SSL certificates with Cloudflare -
+
+    Select "SSL certificates" from the top menu.
+    Select "Add SLL Certificate" buton.
+    Fill out fields (using shephard.cc with Cloudflare domain in this example)
+
+    Domain Names: shephard.cc
+
+    Email: ashep50624@gmail.com
+
+    Use a DNS Challenge: Yes
+        DNS Provider: Cloudflare
+            Credentials File Content: We will need to go to our domain at Cloudflare.com and get the API token.
+                At Cloudflare.com select your domain (shephard.cc).
+                Scroll down and on the left hand side there is an API section.
+                Select "Get your API token"
+                "Create Token"
+                "Edit zone DNS"
+                Make sure "All Zones" is selected in the Zone Resources section.
+                "Confirm"
+                "Copy API token"
+            Paste the API token you received after "dns_cloudflare_api_token=[yourAPItokenhere]"
+
+        Propagation Seconds: Leave Blank
+
+    I agree*: Yes
+
+# Setting up Proxies (using SSL certificates):
+
+    In this example I'm setting up a proxy for my Plex server so it routes traffic from 192.168.1.36:32400 to plex.shephard.cc.
+
+    Details:
+        Select "Add Proxy"
+            Domain Names: shephard.cc
+            Scheme: http (If supported use https)
+            Forward Hostname/IP: 192.168.1.36
+            Forward Port: 32400
+    SSL:
+        SSL Certificate: shephard.cc
+        Force SSL: Yes
+
+Save configuration and a proxy should spin up.
+
+# Configure router to point to Nginx
+
+    You will need to point each domain to your Nginx IP address in order for Nginx to handle to port forwarding.
+
+    For Unifi follow these instructions:
+        Network Manager > Settings > Routing > DNS
+        "Create Entry"
+            Type: Host (A)
+            Domain Name: plex.shephard.cc
+            IP Address: 192.168.1.36
+            TTL: Auto
+
+    When you type in plex.shephard.cc you should now be redirected to 192.168.1.36:32400

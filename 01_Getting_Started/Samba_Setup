@@ -1,0 +1,60 @@
+# Mounting an existing SMB fileshare -
+
+    Make sure all dependecies are installed. The ones I needed are:
+
+        - "sudo apt install psmisc"
+        - "sudo apt install cifs-utils"
+
+    Once installed mount the SMB share with the following command (making sure to replace the username and IP address + Path with the correct data) -
+
+        - "sudo mount -t cifs -o user=[username] //[IPaddress/path/to/share] /mnt/path_to_share/"
+        - "sudo mount -t cifs -o user=ashep //192.168.1.187/Network /mnt/smb/"
+            #add option ",uid=[user]" in order to give it user ownership
+        - Eg: "sudo mount -t cifs -o user=ashep,uid=ashep //192.168.1.36/sambashare /mnt/path-to-share/"
+
+    Files should be available at /mnt/smb now.
+
+# Installing Samba and creating SMB share -
+
+    To install Samba, we run:
+
+        - "sudo apt update"
+        - "sudo apt install samba"
+
+    Create a directory for it to share:
+
+        - "mkdir /home/<username>/sambashare/"
+
+    The command above creates a new folder sambashare in our home directory which we will share later.
+
+    The configuration file for Samba is located at /etc/samba/smb.conf. To add the new directory as a share, we edit the file by running:
+
+        - "sudo nano /etc/samba/smb.conf"
+
+    At the bottom of the file, add the following lines:
+
+
+        [sambashare]
+            path = /home/username/sambashare
+            read only = no
+            browsable = yes
+            writeable = yes
+            create mask = 0755
+
+
+    Then press Ctrl-O to save and Ctrl-X to exit from the nano text editor.
+
+    Restart Samba for it to take effect:
+
+        - "sudo service smbd restart"
+
+    Update the firewall rules to allow Samba traffic:
+
+        - "sudo ufw allow samba"
+
+    Additionally we may need to chmod the directory to give write access with:
+
+        - "sudo chmod 777 /mnt/path_to_hdd"
+            or
+        - "sudo chmod 777 /mnt/hdd1"
+

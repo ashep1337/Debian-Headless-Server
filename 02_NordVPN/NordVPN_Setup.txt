@@ -1,0 +1,20 @@
+# Install NordVPN with command (note you can also use curl)
+
+    sh <(wget -qO - https://downloads.nordcdn.com/apps/linux/install.sh)
+
+
+# Go to web browser and log in to NordVPN.
+
+    Follow Services > NordVPN > Get Access Token > Generate New Token
+
+# Log in to NordVPN via terminal with:
+
+    "sudo nordpn login --token [yourtokenhere]"
+
+    If there is permissiong error
+        "sudo groupadd nordvpn"
+        "sudo usermod -aG nordvpn $USER"
+
+        Reboot
+
+# You can now connect to NordVPN with "nordvpn c"

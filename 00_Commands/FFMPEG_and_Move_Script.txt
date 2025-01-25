@@ -1,0 +1,40 @@
+# Converts mkv files in directory to mp3 files with ffmpeg
+
+    "for i in *.webm; do ffmpeg -i "$i" "${i%.*}.mp3"; done"
+
+# Normalize the audio with:
+
+    "ffmpeg -i input.flac -filter:a loudnorm output.flac"
+
+# Moves just the mp3 files out of defined folders
+
+    "find "$SOURCE_DIR" -maxdepth 1 -type f -name "*.mp3" -exec mv {} "$DEST_DIR" \;"
+
+        Full Script from ChatGPT:
+
+#!/bin/bash
+
+# Source and destination directories
+    SOURCE_DIR=~/media
+    DEST_DIR=~/audio
+
+# Check if the source directory exists
+    if [ ! -d "$SOURCE_DIR" ]; then
+        echo "Source directory does not exist: $SOURCE_DIR"
+        exit 1
+    fi
+
+# Check if the destination directory exists, create it if it doesn't
+    if [ ! -d "$DEST_DIR" ]; then
+        echo "Destination directory does not exist. Creating: $DEST_DIR"
+        mkdir -p "$DEST_DIR"
+    fi
+
+# Move all .mp3 files from the source to the destination directory
+    find "$SOURCE_DIR" -maxdepth 1 -type f -name "*.mp3" -exec mv {} "$DEST_DIR" \;
+
+# Print a message when done
+    echo "MP3 files moved from $SOURCE_DIR to $DEST_DIR"
+
+
+for i in *.webm; do ffmpeg -i "$i" "${i%.*}.mp3"; done | find "/home/ashep/Music/Youtube" -maxdepth 1 -type f -name "*.mp3" -exec mv {} /home/ashep/Music/Mp3 \;

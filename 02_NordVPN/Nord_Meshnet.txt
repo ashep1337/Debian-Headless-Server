@@ -1,0 +1,47 @@
+
+ashep50624-alps.nord - OnePlus Phone - IP: 100.117.37.232
+ashep50624-everest.nord - Galaxybook Laptop - IP: 100.100.48.168
+
+
+Server: 192.168.1.36
+
+Hostname: ashep50624-olympic.nord
+Nickname: -
+IP: 100.120.154.50
+Public Key: SbW+uSHMmtKyrFeD9DgiqmYVXDMdhY60h0uqYnQo+S0=
+OS: linux
+Distribution: Debian GNU/Linux
+
+# Add routing through local network to meshnet connected devices.
+
+    - SSH into device you would like to serve as your network endpoint.
+        In this case it is ashep50624-olympic.nord. The IP is 192.168.1.36.
+        The device we are adding is ashep50624-alps.nord
+
+    - Allow routing and local traffic with these commands:
+
+        "sudo nordvpn meshnet peer routing allow ashep50624-alps.nord"
+        "sudo nordvpn meshnet peer local allow ashep50624-alps.nord"
+
+# Log into app from device
+
+    - On an andriod phone you can log into the app
+    - Enable Meshnet
+    - On the first tab under All Connections > Devcies > <device name> tap the device and it will enable.
+
+    - On Linux with CLI use:
+
+        "nordvpn meshnet peer connect ashep50624-olympic.nord"
+
+    - Check status with:
+
+        "nordvpn status"
+
+# Note:
+    - When accessing an application running on a port you will need to enter your IP with the device name follow by the port number
+
+        Ex - "ashep50624-olympic.nord:2283" would access 192.168.1.36:2283
+
+# Reference:
+
+https://www.youtube.com/watch?v=dcL9lD4msb4&list=PLl5pF81orD_2z-xfhY3Yb7ps6LJw0wFlI&index=14
